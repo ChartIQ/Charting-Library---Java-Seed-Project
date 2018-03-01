@@ -6,6 +6,7 @@ import com.teamdev.jxbrowser.chromium.BrowserCore;
 import com.teamdev.jxbrowser.chromium.BrowserPreferences;
 import com.teamdev.jxbrowser.chromium.internal.Environment;
 import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
