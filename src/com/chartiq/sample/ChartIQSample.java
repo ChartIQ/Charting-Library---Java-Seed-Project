@@ -1,8 +1,22 @@
 package com.chartiq.sample;
 
+import com.chartiq.sample.model.DataSources;
+import com.google.gson.Gson;
+import com.teamdev.jxbrowser.chromium.BrowserCore;
+import com.teamdev.jxbrowser.chromium.BrowserPreferences;
+import com.teamdev.jxbrowser.chromium.internal.Environment;
+import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,190 +29,99 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-import com.chartiq.sample.ChartIQ.DataSourceCallback;
-import com.chartiq.sample.model.OHLCChart;
-import com.google.gson.Gson;
-import com.teamdev.jxbrowser.chromium.BrowserCore;
-import com.teamdev.jxbrowser.chromium.BrowserPreferences;
-import com.teamdev.jxbrowser.chromium.internal.Environment;
-import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
+public class ChartIQSample extends Application implements DataSources.DataSource {
 
-import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
-import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
+	private ChartIQ chartIQ;
+	private TextField textField;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-public class ChartIQSample extends Application {
-
-	ChartIQ chartIQ;
+	static final String stxUrl = "http://stxdev.local/default/sample-template-native-sdk.html";
+	static final String userAgent = "Mozilla/5.0 (Linux; <android Version>; <Build Tag etc.>) AppleWebKit/<WebKit Rev> (KHTML, like Gecko) Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>";
 
 	@Override
 	public void init() throws Exception {
 
-		System.out.println(Environment.isMac());
+		BrowserPreferences.setUserAgent(userAgent);
+		BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222");
 
 		// On Mac OS X Chromium engine must be initialized in non-UI thread.
 		if (Environment.isMac()) {
 			BrowserCore.initialize();
 		}
-
-
-	} 
+	}
 
 	@Override
 	public void start(final Stage primaryStage) throws IOException {
 
-
 		this.chartIQ = new ChartIQ();
+		chartIQ.setBrowser(stxUrl);
+		BrowserView browserView = chartIQ.getBrowserView();
 
-//		// Create the FXMLLoader
-//				FXMLLoader loader = new FXMLLoader();
-//				// Path to the FXML File
-//				String fxmlDocPath = "fxml_example.fxml";
-//
-//				//root = FXMLLoader.load(getClass().getResource("fxml_example.fxml"));
-//				FileInputStream fxmlStream;
-//				try {
-//					//fxmlStream = new FileInputStream(fxmlDocPath);
-//
-//					// Create the Pane and all Details
-//					VBox root = (VBox) FXMLLoader.load(getClass().getResource("fxml_example.fxml"));
-//
-//					// Create the Scene
-//					Scene scene = new Scene(root);
-//					// Set the Scene to the Stage
-//					primaryStage.setScene(scene);
-//					// Set the Title to the Stage
-//					primaryStage.setTitle("A simple FXML Example");
-//					// Display the Stage
-//					primaryStage.show();
-//				} catch (FileNotFoundException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-
-				
-	 
-		Label label1 = new Label("Symbol:");
+		System.out.println("Debugging URL:");
+		System.out.println(chartIQ.getBrowser().getRemoteDebuggingURL());
 
 		primaryStage.setTitle("ChartIQ Example");
-		TextField textField = new TextField();
+
+		textField = new TextField();
 		textField.setPrefSize(150, 28);
 		textField.setPrefColumnCount(15);
 		textField.setPromptText("Enter Symbol");
 		textField.setFocusTraversable(false);
-		Button button = new Button("Lookup");
-		HBox hb = new HBox();
+
 		ComboBox periodicity = new ComboBox();
 		periodicity.getItems().addAll("1 Day", "1 Week", "1 Month", "1 Minute");
 		periodicity.getSelectionModel().select(0);
+
+		Button button = new Button("Lookup");
+		HBox hb = new HBox();
 		hb.getChildren().addAll(textField, button, periodicity);
 		hb.setSpacing(10);
 		hb.setStyle("-fx-background-color: #336699;");
 
-		// Browser browser = new Browser();
-		// BrowserView view = new BrowserView(browser);
-		//
-		// BorderPane borderPane = new BorderPane();
-		// borderPane.setCenter(view);
-		// borderPane.setTop(hb);
-		//
-		// String remoteDebuggingURL = browser.getRemoteDebuggingURL();
-		//
-		// JFrame frame1 = new JFrame();
-		// frame1.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		// frame1.add(view, BorderLayout.CENTER);
-		// frame1.setSize(700, 500);
-		// frame1.setLocationRelativeTo(null);
-		// frame1.setVisible(true);
-
-		// Scene scene = new Scene(borderPane, 700, 500);
-		// primaryStage.setScene(scene);
-		// primaryStage.show();
-
-		chartIQ.setBrowser("http://stxdev.local/default/sample-template-native-sdk.html");
-		BrowserView browserView = chartIQ.getBrowserView();
-
-		// Creates another Browser instance and loads the remote Developer
-		// Tools URL to access HTML inspector.
-		// Browser browser2 = new Browser();
-		// BrowserView browserView2 = new BrowserView(browser2);
-
-		// JFrame frame2 = new JFrame();
-		// frame2.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		// frame2.add(browserView2, BorderLayout.CENTER);
-		// frame2.setSize(700, 500);
-		// frame2.setLocationRelativeTo(null);
-		// frame2.setVisible(true);
-
-		// browser2.loadURL(browser.getRemoteDebuggingURL());
-
-		System.out.println(chartIQ.getBrowser().getRemoteDebuggingURL());
-
 		BorderPane pane = new BorderPane();
 		pane.setTop(hb);
 		pane.setCenter(browserView);
-		// pane.getChildren()browser.(browserView, BorderLayout.CENTER);
+
 		Scene scene = new Scene(pane, 800, 500);
 		primaryStage.setTitle("ChartIQ Demo");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent event) {
-				Platform.exit();
-			}
-		});
+		primaryStage.setOnCloseRequest(event -> Platform.exit());
 
-		button.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				String symbol = "IBM";
-				chartIQ.setSymbol("AAPL");
-				// browser.executeJavaScript("test2();");
-				// browser.executeJavaScript("alert('asdf')");
-				// browser.executeJavaScript("stxx.newChart('IBM');");
-				// browser.executeJavaScript("window.callNewChart('ibm');");
-			}
-		});
+		button.setOnAction(e -> {
+            String symbol = textField.getText();
+            chartIQ.setSymbol(symbol);
+        });
 
-		chartIQ.setDataSource(new ChartIQ.DataSource() {
-			@Override
-			public void pullUpdateData(Map<String, Object> params, DataSourceCallback callback) {
-				loadChartData(params, callback);
-			}
+		chartIQ.setDataSource(this);
 
-			@Override
-			public void pullPaginationData(Map<String, Object> params, DataSourceCallback callback) {
-				loadChartData(params, callback);
-			}
-
-			@Override
-			public void pullInitialData(Map<String, Object> params, DataSourceCallback callback) {
-				loadChartData(params, callback);
-			}
-		});
 	}
 
-	private void loadChartData(Map<String, Object> params, final ChartIQ.DataSourceCallback callback) {
+	// DataSources.DataSource members
+	@Override
+	public void pullUpdateData(Map<String, Object> params, DataSources.DataSourceCallback callback) {
+
+		System.out.println("pullUpdateData");
+		loadChartData(params, callback);
+	}
+
+	@Override
+	public void pullPaginationData(Map<String, Object> params, DataSources.DataSourceCallback callback) {
+
+		System.out.println("pullPaginationData");
+		loadChartData(params, callback);
+	}
+
+	@Override
+	public void pullInitialData(Map<String, Object> params, DataSources.DataSourceCallback callback) {
+
+		System.out.println("pullInitialData");
+		loadChartData(params, callback);
+	}
+
+	private void loadChartData(Map<String, Object> params, final DataSources.DataSourceCallback callback) {
+
 		if (!params.containsKey("start") || params.get("start") == null || "".equals(params.get("start"))) {
 			params.put("start", "2016-12-16T16:00:00.000Z");
 		}
@@ -212,7 +135,6 @@ public class ChartIQSample extends Application {
 		}
 
 		boolean isMinute = params.containsKey("interval");
-		// && TextUtils.isDigitsOnly(String.valueOf(params.get("interval")));
 		params.put("interval", isMinute ? "minute" : params.get("interval"));
 		params.put("period", isMinute ? "minute" : params.get("period"));
 
@@ -230,12 +152,11 @@ public class ChartIQSample extends Application {
 		final String url = builder.toString();
 		final String symbol = String.valueOf(params.get("symbol"));
 
-		ExecutorService executor = Executors.newFixedThreadPool(25);
+		ExecutorService executor = Executors.newFixedThreadPool(4);
 
 		Runnable runnableTask = () -> {
 			String body = "";
 			try {
-				System.out.println("URL: " + url);
 				URL connectionUrl = new URL(url);
 				HttpURLConnection connection = (HttpURLConnection) connectionUrl.openConnection();
 				connection.setRequestMethod("GET");
@@ -260,12 +181,12 @@ public class ChartIQSample extends Application {
 					}
 					body = response.toString();
 					
-					OHLCChart[] data = new Gson().fromJson(body, OHLCChart[].class);
+					DataSources.OHLCChart[] data = new Gson().fromJson(body, DataSources.OHLCChart[].class);
                     callback.execute(data);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				OHLCChart[] data = {};
+				DataSources.OHLCChart[] data = {};
                 callback.execute(data);
 			}
 		};
@@ -276,4 +197,5 @@ public class ChartIQSample extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
 }
