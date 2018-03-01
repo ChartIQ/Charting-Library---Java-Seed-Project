@@ -7,13 +7,11 @@ import java.util.Map;
 
 import com.chartiq.sample.model.OHLCChart;
 import com.google.gson.Gson;
-import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.BrowserPreferences;
-import com.teamdev.jxbrowser.chromium.JSAccessible;
-import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.*;
 import com.teamdev.jxbrowser.chromium.events.FrameLoadEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
 import com.teamdev.jxbrowser.chromium.events.LoadEvent;
+import com.teamdev.jxbrowser.chromium.internal.Environment;
 import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
 
 public class ChartIQ {
@@ -28,6 +26,7 @@ public class ChartIQ {
 	JavaObject javaObject = new JavaObject();
 
 	public ChartIQ() {
+
 		BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222");
 		browser = new Browser();
 		browserView = new BrowserView(browser);
