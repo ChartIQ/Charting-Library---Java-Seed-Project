@@ -196,6 +196,7 @@ public class ChartIQSample extends Application implements DataSources.DataSource
 	}
 
 	public static void main(String[] args) {
+
 		launch(args);
 	}
 

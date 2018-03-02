@@ -7,19 +7,12 @@
     <groupId>com.chartiq</groupId>
     <artifactId>Charting-Library---Java-Seed-Project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
-    <!--<build>-->
-        <!--<resources>-->
-            <!--<resource>-->
-                <!--<directory>lic</directory>-->
-            <!--</resource>-->
-        <!--</resources>-->
-    <!--</build>-->
 
     <repositories>
         <repository>

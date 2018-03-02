@@ -19,4 +19,6 @@ Charting Library within a browser view control.
  The url of your webserver will need to be copied into the `stxUrl` variable in `ChartIQSample.java`
  - The JxBrowser `license.jar` license file will need to be copied into a directory on the classpath of the application. 
  - Running the application should launch a JavaFX window with the JxBrowser with a text input for you to enter a symbol.  
- Clicking "Lookup" will fetch data from ChartIQ's quote simulator and populate a chart.
+ Clicking "Lookup" will fetch data from ChartIQ's quote simulator and populate a chart.  
+ In the console, all java and javascript messages will appear, including a debugging url which can be used within an instance of Chrome. 
+ 
