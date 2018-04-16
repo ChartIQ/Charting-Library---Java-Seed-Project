@@ -4,12 +4,12 @@ If you have questions or get stuck using this project or the ChartIQ Charting Li
 
 # Charting-Library---Java-Seed-Project
 
-This is a basic JavaFX project that utilizes JxBrowser [https://www.teamdev.com/jxbrowser] to display the ChartIQ Charting Library within a browser view control. We chose JxBrowser for its superior handling of modern browser features (see [this comparison to JavaFX WebView](https://jxbrowser.support.teamdev.com/support/solutions/articles/9000013137-jxbrowser-vs-javafx-webview)).
+This is a basic JavaFX project that utilizes [https://www.teamdev.com/jxbrowser](JxBrowser) to display the ChartIQ Charting Library within a browser view control. We chose JxBrowser for its superior handling of modern browser features (see [this comparison to JavaFX WebView](https://jxbrowser.support.teamdev.com/support/solutions/articles/9000013137-jxbrowser-vs-javafx-webview)).
 
 ## Requirements
 
  - An HTTP server running a copy of the ChartIQ library, version 3.0+ is required. To get your copy, visit https://www.chartiq.com/products/html5-charting-library/ to see a demo and get in touch with us.
- - A JxBrowser license (license.jar) is required, and must be placed on the classpath.  An evaluation license can be obtained from [https://www.teamdev.com/jxbrowser].
+ - A JxBrowser license (license.jar) is required, and must be placed on the classpath.  An evaluation license can be obtained from https://www.teamdev.com/jxbrowser.
  - A Java JDK is required, and an Apache Maven pom file (pom.xml) lists the required library dependencies of the project.
 
 ## Getting started
