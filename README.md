@@ -1,6 +1,6 @@
 ## Questions and support
 
-If you have questions or get stuck using this project or the ChartIQ Charting Library, the dev support team can be reached through [dev@chartiq.com](mailto:dev@chartiq.com).
+If you have questions or get stuck using this project or the ChartIQ Charting Library, the dev support team can be reached through [support@chartiq.com](support@chartiq.com).
 
 # Charting-Library---Java-Seed-Project
 
